@@ -24,7 +24,7 @@ module.exports = (sequelize, type) => {
         allowNull: false,
       },
       due_amount: {
-        type: type.Float,
+        type: type.FLOAT,
       },
       phone: {
         type: type.STRING(200),
