@@ -20,9 +20,15 @@ module.exports = (sequelize, type) => {
         type: type.STRING(200),
       },
       status: {
+          //true=available false=unavailable
         type: type.BOOLEAN,
         default: true,
       },
+        categoryId:{
+          type:type.INTEGER,
+            required:true,
+            allowNull:false
+        }
     },
     {
       timestamps: true,

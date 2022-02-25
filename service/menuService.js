@@ -1,13 +1,13 @@
 const { category } = require("../lib/databaseConnection");
-const {product}=require("../lib/databaseConnection")
+const { product } = require("../lib/databaseConnection");
 class CategoryService {
     async create(payload) {
-        let data=await category.create(payload)
+        let data=await product.create(payload)
         return data;
     }
 
     async update(payload, id) {
-        const returnData = await category.update(payload, {
+        const returnData = await product.update(payload, {
             where: { id },
             attributes: { exclude: ["createdAt", "updatedAt"] },
         });
@@ -15,17 +15,16 @@ class CategoryService {
     }
 
     async findAll() {
-        const returnData = await category.findAll({include:product});
+        const returnData = await product.findAll({include:category});
         return returnData;
     }
 
     async findById(id) {
-        const returnData = await category.findOne({ where: { id },include: product
-        } );
+        const returnData = await product.findOne({ where: { id } });
         return returnData;
     }
     async delete(id) {
-        const returnData = await category.destroy({ where: { id } });
+        const returnData = await product.destroy({ where: { id } });
         return returnData;
     }}
 

@@ -1,7 +1,7 @@
 const CategoryService = require("../service/categoriesService");
 const successResponse = require("../utils/successResponse");
 
-require("dotenv").config();
+
 
 class CategoriesController {
     async create(req, res, next) {
