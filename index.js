@@ -1,5 +1,5 @@
 const express = require("express");
-const PORT = 3001;
+const PORT = 3000;
 
 const app = express();
 const { sequelize } = require("./lib/databaseConnection");
@@ -14,7 +14,7 @@ require("./utils/passportConfig")(passport);
 sequelize
   .authenticate()
   .then(() => {
-    // sequelize.sync({ alter: true });
+    // sequelize.sync({ force: true });
     console.log("Database connected successfully");
   })
   .catch((err) => {
