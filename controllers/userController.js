@@ -2,22 +2,25 @@ const UserService = require("../service/userService");
 const successResponse = require("../utils/successResponse");
 const generateToken = require("../utils/tokenGenerator");
 const jwt = require("jsonwebtoken");
+const {user}=require("../lib/databaseConnection")
 require("dotenv").config();
 
 class UserController {
   async create(req, res, next) {
     try {
-      const id = req.body.id;
-      let userData = await UserService.findById(id);
-      console.log(req.file);
+
+      let userData = await user.findOne({where:{username:req.body.username}});
       if (req.file != undefined) {
         req.body.profile_pic = req.file.path;
       }
+      let confirm_password=req.body.confirm_password
       if (userData == null) {
-        await UserService.create(req.body);
-        const token = generateToken(req.body);
-        req.body.token = token;
-        successResponse(res, 400, req.body, "User Created");
+        if(req.body.password==confirm_password) {
+          await UserService.create(req.body);
+          const token = generateToken(req.body);
+          req.body.token = token;
+          successResponse(res, 400, req.body, "User Created");
+        }
       } else {
         res.json({
           message: "User already exists",

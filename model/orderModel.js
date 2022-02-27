@@ -14,7 +14,11 @@ module.exports=(sequelize,type)=>{
             type:type.INTEGER,
             required:true,
             default:0
-        }
+        },user_id:{
+            type:type.INTEGER,
+            required:true,
+            allowNull:false
+            }
     },{timestamps:true}
         )
 }

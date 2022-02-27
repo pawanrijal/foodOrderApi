@@ -1,15 +1,15 @@
 const CategoryService = require("../service/categoriesService");
 const successResponse = require("../utils/successResponse");
+const {category} = require("../lib/databaseConnection");
 
 
 
 class CategoriesController {
     async create(req, res, next) {
         try {
-            const id = req.body.id;
-            let categoryData = await CategoryService.findById(id);
+            let categoryData = await category.findOne({where:{name:req.body.name}});
 
-            if (categoryData == null || categoryData===undefined) {
+            if (categoryData == null) {
                 await CategoryService.create(req.body)
                 successResponse(res, 400, req.body, "Category Created");
             } else {

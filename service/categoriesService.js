@@ -2,8 +2,10 @@ const { category } = require("../lib/databaseConnection");
 const {product}=require("../lib/databaseConnection")
 class CategoryService {
     async create(payload) {
-        let data=await category.create(payload)
-        return data;
+
+            let data = await category.create(payload)
+            return data;
+
     }
 
     async update(payload, id) {
@@ -27,6 +29,13 @@ class CategoryService {
     async delete(id) {
         const returnData = await category.destroy({ where: { id } });
         return returnData;
-    }}
+    }
+    async findByname(name) {
+    const returnData=await category.findOne({where:{name}});
+    return returnData;
+}
+}
+
+
 
 module.exports = new CategoryService()

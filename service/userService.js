@@ -1,4 +1,5 @@
 const { user } = require("../lib/databaseConnection");
+const { order } = require("../lib/databaseConnection");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/tokenGenerator");
 class UserService {
@@ -28,12 +29,12 @@ class UserService {
   }
 
   async findAll() {
-    const returnData = await user.findAll();
+    const returnData = await user.findAll({include:order});
     return returnData;
   }
 
   async findById(id) {
-    const returnData = await user.findOne({ where: { id } });
+    const returnData = await user.findOne({ where: { id },include:order });
     return returnData;
   }
   async delete(id) {
