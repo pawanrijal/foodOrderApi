@@ -1,13 +1,16 @@
 const OrderService = require("../service/orderService");
 const successResponse = require("../utils/successResponse");
 const {order} = require("../lib/databaseConnection");
-
+const jwt = require("jsonwebtoken");
+const UserService = require("../service/userService")
 
 
 class OrderController {
     async create(req, res, next) {
         try {
-
+            const token = req.headers.authorization.split(" ")[1];
+            const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+            req.body.userId=decoded.sub
                 await OrderService.create(req.body)
                 successResponse(res, 400, req.body, "Order Created");
 

@@ -1,13 +1,14 @@
 const MenuService = require("../service/menuService");
 const successResponse = require("../utils/successResponse");
-
+const {category} = require("../lib/databaseConnection");
+const {product}=require("../lib/databaseConnection")
 
 
 class MenuController {
     async create(req, res, next) {
         try {
-            const id = req.body.id;
-            let menuData = await MenuService.findById(id);
+
+            let menuData = await product.findOne({where:{name:req.body.name}});
 
             if (menuData == null || menuData===undefined) {
                 await MenuService.create(req.body)

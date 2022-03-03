@@ -29,7 +29,7 @@ class UserService {
   }
 
   async findAll() {
-    const returnData = await user.findAll({include:order});
+    const returnData = await user.findAll({include:order},{attributes:{exclude:["password","createdAt","updatedAt"]}});
     return returnData;
   }
 
@@ -62,8 +62,8 @@ class UserService {
     let _user = await user.findOne({
       where: {
         id: decoded.sub,
-      },
-      attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+      },include:order,
+      attributes: { exclude: ["password", "createdAt", "updatedAt","id"] },
     });
     return _user;
   }

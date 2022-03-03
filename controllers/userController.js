@@ -9,17 +9,22 @@ class UserController {
   async create(req, res, next) {
     try {
 
-      let userData = await user.findOne({where:{username:req.body.username}});
       if (req.file != undefined) {
-        req.body.profile_pic = req.file.path;
+
+        req.body.profile_pic = req.files;
       }
-      let confirm_password=req.body.confirm_password
+      let userData = await user.findOne({where:{username:req.body.username}});
       if (userData == null) {
-        if(req.body.password==confirm_password) {
+        if(req.body.password==req.body.confirm_password) {
           await UserService.create(req.body);
           const token = generateToken(req.body);
           req.body.token = token;
           successResponse(res, 400, req.body, "User Created");
+        }
+        else{
+          res.status(401).json({
+            "message":"Password mismatch"
+          })
         }
       } else {
         res.json({

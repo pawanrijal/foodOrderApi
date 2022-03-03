@@ -1,6 +1,6 @@
 const { category } = require("../lib/databaseConnection");
 const { product } = require("../lib/databaseConnection");
-class CategoryService {
+class MenuService {
     async create(payload) {
         let data=await product.create(payload)
         return data;
@@ -28,4 +28,4 @@ class CategoryService {
         return returnData;
     }}
 
-module.exports = new CategoryService()
+module.exports = new MenuService()

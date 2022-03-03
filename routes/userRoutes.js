@@ -3,13 +3,13 @@ const { userSchema } = require("../validationSchemas/userValidationSchema");
 const validator = require("../middleware/validationMiddleware");
 
 const passport = require("passport");
-const { upload } = require("../multerConfig/multerConfig");
+const { upload } = require("../middleware/upload_middleware");
 
 module.exports = (app) => {
   app
-    .route("/user/create")
+    .route("/user")
     .post(
-      upload.single("profile_pic"),
+      upload.array("profile_pic",10),
       validator(userSchema),
       UserController.create
     ),

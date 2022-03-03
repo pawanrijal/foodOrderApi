@@ -10,6 +10,19 @@ module.exports=(sequelize,type)=>{
         },
         paid_date:{
             type:type.DATE,
+        },
+        userId:{
+            type:type.INTEGER,
+            required:true
+        },
+        orderId:{
+            type:type.INTEGER,
+            required:true
+        },
+        dues:{
+            type:type.BOOLEAN,
+            allowNull:false,required:true
         }
+
     })
 }
