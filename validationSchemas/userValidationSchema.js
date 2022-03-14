@@ -7,7 +7,8 @@ const userSchema = Joi.object({
   confirm_password:Joi.string().min(8).required(),
   profile_pic: Joi.string(),
   email: Joi.string().email({ tlds: { allow: false } }),
-  phone:Joi.string().required().min(10)
+  phone:Joi.string().required().min(10),
+  roleId:Joi.number()
 });
 
 module.exports = { userSchema };

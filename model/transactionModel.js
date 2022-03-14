@@ -1,28 +1,27 @@
 module.exports=(sequelize,type)=>{
-    return sequelize.define("payments",{
+    return sequelize.define("transactions",{
         id:{
             type:type.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        amount:{
-            type:type.FLOAT,
-        },
-        paid_date:{
+
+        transaction_date:{
             type:type.DATE,
         },
-        userId:{
+        paymentId:{
             type:type.INTEGER,
             required:true
         },
-        orderId:{
-            type:type.INTEGER,
-            required:true
+        debit:{
+            type:type.FLOAT,
+            default:0
         },
-        dues:{
-            type:type.BOOLEAN,
-            required:true
+        credit:{
+            type:type.FLOAT,
+            default:0
         }
+
 
     })
 }

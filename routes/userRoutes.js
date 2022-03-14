@@ -26,4 +26,5 @@ module.exports = (app) => {
       UserController.profile
     );
   app.route("/user/login").post(UserController.login);
+  app.route("/user/changePassword").post(UserController.changePassword)
 };

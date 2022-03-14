@@ -111,6 +111,25 @@ class UserController {
       next(err);
     }
   }
+  async changePassword(req,res,next){
+    try{
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+      const _user=await UserService.findById(decoded.sub)
+      if(_user==null||_user==undefined){
+        res.json({"message":"userNotFound"})
+      }else {
+        const userData = await UserService.update(req.body,decoded.sub)
+        successResponse(res, 200, userData, "Password Changed");
+      }
+    }
+    catch (err){
+      next(err)
+    }
+  }
 }
+
+
+
 
 module.exports = new UserController();

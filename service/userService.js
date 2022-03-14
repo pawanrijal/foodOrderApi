@@ -21,12 +21,24 @@ class UserService {
   }
 
   async update(payload, id) {
-    const returnData = await user.update(payload, {
-      where: { id },
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
-    return returnData;
-  }
+    const saltRounds = 10;
+    const { password } = payload;
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
+        if (err) {
+          return err;
+        }
+
+        payload.password = hash;
+
+        const returnData =  user.update(payload, {
+          where: {id},
+          attributes: {exclude: ["createdAt", "updatedAt"]},
+        });
+        return returnData;
+      })
+    })}
+
 
   async findAll() {
     const returnData = await user.findAll({include:order},{attributes:{exclude:["password","createdAt","updatedAt"]}});
@@ -68,5 +80,7 @@ class UserService {
     return _user;
   }
 }
+
+
 
 module.exports = new UserService();

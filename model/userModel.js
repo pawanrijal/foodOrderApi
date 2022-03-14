@@ -6,11 +6,9 @@ module.exports = (sequelize, type) => {
         type: type.INTEGER,
           autoIncrement: true,
         primaryKey: true,
-
       },
       username: {
         type: type.STRING(100),
-        unique: true,
         allowNull: false,
       },
       password: {
@@ -22,6 +20,7 @@ module.exports = (sequelize, type) => {
       },
       email: {
         type: type.STRING(200),
+          unique:true,
         allowNull: false,
       },
       due_amount: {
@@ -30,6 +29,10 @@ module.exports = (sequelize, type) => {
       phone: {
         type: type.STRING(200),
       },
+        roleId:{
+          type:type.INTEGER,
+            default:1
+        }
     },
     {
       timestamps: true,
