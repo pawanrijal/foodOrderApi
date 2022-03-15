@@ -1,8 +1,7 @@
 const roleService = require("../service/roleService");
 const successResponse = require("../utils/successResponse");
-const {payment} = require("../lib/databaseConnection");
-const jwt = require("jsonwebtoken");
-const UserService = require("../service/userService")
+
+const accessService=require("../service/accessService")
 
 class RoleController {
     async create(req, res, next) {
@@ -49,8 +48,9 @@ class RoleController {
     }
 
     async delete(req, res, next) {
-        const id = req.params.id;
+
         try {
+            const id = req.params.id;
             let roleData = await roleService.findById(id);
             if (roleData == null) {
                 res.status(404).json({ status: "404", message: " Not Found" });
@@ -61,7 +61,46 @@ class RoleController {
         } catch (err) {
             next(err);
         }
-    }}
+    }
+    async assignRoleToUser(req,res,next){
+        try{
+        await roleService.assignRoleToUser(req.body)
+            successResponse(res,200,null,"Assigned Role TO User")
+        }catch(err){
+            next(err)
+        }
+    }
+
+    async removeRoleToUser(req,res,next){
+        try{
+            await roleService.removeRoleToUser(req.body)
+            successResponse(res,200,null,"Removed Role TO User")
+        }catch(err){
+            next(err)
+        }
+    }
+    async addAccessToRole(req, res, next) {
+        try {
+            await accessService.addAccessToRole(req.body);
+
+            successResponse(res, 200, null, "Access has been granted to the role");
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async removeAccessFromRole(req, res, next) {
+        try {
+            await accessService.removeAccessToRole(req.body);
+
+            successResponse(res, 200, null, "Access has been removed from the role",);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+
+}
 
 
 

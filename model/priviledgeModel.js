@@ -1,5 +1,5 @@
 module.exports=(sequelize,type)=>{
-    return sequelize.define("modules",{
+    return sequelize.define("privileges",{
         id: {
             type: type.INTEGER,
             primaryKey: true,
