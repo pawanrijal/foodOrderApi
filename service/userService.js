@@ -6,18 +6,13 @@ class UserService {
   async create(payload) {
     const saltRounds = 10;
     const { password } = payload;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      bcrypt.hash(password, salt, function (err, hash) {
-        if (err) {
-          return err;
-        }
-
+   const salt = await  bcrypt.genSalt(saltRounds);
+   const hash = await    bcrypt.hash(password, salt);
         payload.password = hash;
 
-        const data = user.create(payload);
-        return data;
-      });
-    });
+      const data = await user.create(payload);
+      return data;
+
   }
 
   async update(payload, id) {

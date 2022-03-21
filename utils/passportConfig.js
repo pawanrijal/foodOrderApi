@@ -20,7 +20,7 @@ const jwt = new JwtStrategy(opts, function (jwt_payload, done) {
   }
 });
 
-const hello = (passport) => {
+
+module.exports = (passport) => {
   passport.use(jwt);
 };
-module.exports = hello;

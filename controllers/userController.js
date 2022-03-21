@@ -16,10 +16,10 @@ class UserController {
       let userData = await user.findOne({where:{username:req.body.username}});
       if (userData == null) {
         if(req.body.password==req.body.confirm_password) {
-          await UserService.create(req.body);
+          const user=await UserService.create(req.body);
           const token = generateToken(req.body);
           req.body.token = token;
-          successResponse(res, 400, req.body, "User Created");
+          successResponse(res, 400, user, "User Created");
         }
         else{
           res.status(401).json({
