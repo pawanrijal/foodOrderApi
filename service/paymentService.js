@@ -1,10 +1,19 @@
 
 const { payment } = require("../lib/databaseConnection");
 const { user } = require("../lib/databaseConnection");
-class OrderService {
+const paymentRepository=require("../repository/paymentRepository")
+class PaymentService {
     async create(payload) {
-        let data=await payment.create(payload)
-        return data;
+        try {
+
+            let data = await payment.create(payload)
+            await paymentRepository.deductDues(payload)
+            return data;
+        }
+        catch (err){
+
+            throw new Error(err)
+        }
     }
 
     async update(payload, id) {
@@ -29,4 +38,4 @@ class OrderService {
         return returnData;
     }}
 
-module.exports = new OrderService()
+module.exports = new PaymentService()

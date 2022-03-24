@@ -8,30 +8,31 @@ module.exports = (sequelize, type) => {
         primaryKey: true,
       },
       username: {
-        type: type.STRING(100),
+        type: type.STRING,
         allowNull: false,
       },
       password: {
-        type: type.STRING(200),
+        type: type.STRING,
         allowNull: false,
       },
       profile_pic: {
-        type: type.STRING(200),
+        type: type.STRING,
       },
       email: {
-        type: type.STRING(200),
+        type: type.STRING,
           unique:true,
         allowNull: false,
       },
       due_amount: {
-        type: type.FLOAT,
+        type: type.INTEGER,
+          defaultValue: 0,
       },
       phone: {
-        type: type.STRING(200),
+        type: type.STRING,
       },
         roleId:{
           type:type.INTEGER,
-            default:1
+            defaultValue:2,
         }
     },
     {

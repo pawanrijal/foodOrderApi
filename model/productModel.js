@@ -22,7 +22,7 @@ module.exports = (sequelize, type) => {
       status: {
           //true=available false=unavailable
         type: type.BOOLEAN,
-        default: true,
+        defaultValue: true,
       },
         categoryId:{
           type:type.INTEGER,

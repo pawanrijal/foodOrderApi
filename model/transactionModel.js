@@ -15,11 +15,11 @@ module.exports=(sequelize,type)=>{
         },
         debit:{
             type:type.FLOAT,
-            default:0
+            defaultValue:0
         },
         credit:{
             type:type.FLOAT,
-            default:0
+            defaultValue:0
         }
 
 

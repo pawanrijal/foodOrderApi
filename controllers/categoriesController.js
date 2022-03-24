@@ -10,8 +10,8 @@ class CategoriesController {
             let categoryData = await category.findOne({where:{name:req.body.name}});
 
             if (categoryData == null) {
-                await CategoryService.create(req.body)
-                successResponse(res, 400, req.body, "Category Created");
+                let data=await CategoryService.create(req.body)
+                successResponse(res, 400, data, "Category Created");
             } else {
                 res.json({
                     message: "Category already exists",

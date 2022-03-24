@@ -4,11 +4,12 @@ const privilegeService=require("../service/priviledgeService")
 const {modulePriviledge,access}=require("../lib/databaseConnection")
 
 
+
 class accessService {
     async addAccessToRole(payload) {
         const role = await RoleService.findById(payload.roleId);
         const module = await moduleService.findById(payload.moduleId);
-        const privilege = await privilegeService.findById(payload.priviledgeId);
+        const privilege = await privilegeService.findById(payload.privilegeId);
 
         // check if the mapping between the `module` and `privilege` exists
         const ModulePriviledge = await modulePriviledge.findOne({
@@ -20,6 +21,7 @@ class accessService {
         if (ModulePriviledge === null || ModulePriviledge === undefined) {
             throw new Error("module privilege mapping does not exist");
         }
+
 
         // check if the `role` already has the access
         const grantAccess = await access.findOne({

@@ -7,7 +7,7 @@ class ModulePriviledgeService
     {
 
         // check if the modules exists
-        const {moduleId} = payload;
+        const {moduleId,privilegeId} = payload;
         const module = await modules.findOne({
             where: {
                 id: moduleId,
@@ -17,6 +17,14 @@ class ModulePriviledgeService
             throw new Error("Module does not exist");
         }
 //TODO:check if privilrge already exists
+        const privilege = await priviledge.findOne({
+            where: {
+                id: privilegeId,
+            },
+        });
+        if (privilege === null || privilegeId === undefined) {
+            throw new Error("Privilege does not exist");
+        }
         // check if the mapping is already done
         const mapping = await modulePriviledge.findOne({where: payload});
         if (mapping) {

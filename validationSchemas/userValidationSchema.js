@@ -8,7 +8,6 @@ const userSchema = Joi.object({
   profile_pic: Joi.string(),
   email: Joi.string().email({ tlds: { allow: false } }),
   phone:Joi.string().required().min(10),
-  roleId:Joi.number()
 });
 
 module.exports = { userSchema };

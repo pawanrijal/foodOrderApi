@@ -11,8 +11,8 @@ class OrderController {
             const token = req.headers.authorization.split(" ")[1];
             const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
             req.body.userId=decoded.sub
-                await OrderService.create(req.body)
-                successResponse(res, 400, req.body, "Order Created");
+                const data=await OrderService.create(req.body)
+                successResponse(res, 400, data, "Order Created");
 
         } catch (err) {
             next(err);
@@ -65,7 +65,9 @@ class OrderController {
         } catch (err) {
             next(err);
         }
-    }}
+    }
+
+}
 
 
 

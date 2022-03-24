@@ -1,15 +1,22 @@
 
 const { order } = require("../lib/databaseConnection");
-const { product } = require("../lib/databaseConnection");
+const { product,sequelize } = require("../lib/databaseConnection");
 const MenuService=require("../service/menuService")
+const orderRepository=require("../repository/orderRepository")
 class OrderService {
     async create(payload) {
-        let product_id=payload.productId
-        let _product=await MenuService.findById(product_id)
-        payload.total_amount=_product.price*payload.quantity
-        let data=await order.create(payload)
-        return data;
-    }
+        try{
+    const transaction=sequelize.transaction();
+
+        const order =await orderRepository.createOrder(payload.userId,transaction)
+
+        await orderRepository.addToOrder(order,payload,transaction);
+    transaction.commit()
+        return order;
+    }catch(err){
+            transaction.rollback()
+            throw err;
+        }}
 
     async update(payload, id) {
         const returnData = await order.update(payload, {
