@@ -16,6 +16,9 @@ module.exports = (sequelize, type) => {
         type: type.STRING(200),
         allowNull: false,
       },
+        description:{
+          type:type.STRING
+        },
       image: {
         type: type.STRING(200),
       },

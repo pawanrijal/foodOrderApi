@@ -15,11 +15,11 @@ const  authorizationMiddleware=async (req,res,next)=> {
     try {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
-        if(decoded.exp*1000>Date.now()){
+        if(decoded.exp*1000<Date.now()){
             throw new tokenExpiredException()
         }
         // console.log(decoded);
-        const userData = await UserService.profile(decoded);
+        const userData = await UserService.findById(decoded.sub);
         const roleData=await RoleService.findById(userData.roleId);
         if (userData === undefined || userData === null) {
             throw new notFoundException("User")
@@ -72,6 +72,8 @@ const  authorizationMiddleware=async (req,res,next)=> {
             throw new Error("Authorization Exception")
         }
         req.decoded=decoded;
+        req.user=user;
+        req.role=role
 
         // `user` is authorized pass the control to next middleware
         next();
@@ -83,6 +85,7 @@ const  authorizationMiddleware=async (req,res,next)=> {
 
 
 module.exports=authorizationMiddleware;
+
 
 
 
