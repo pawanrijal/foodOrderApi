@@ -2,7 +2,8 @@ const RoleService=require("../service/roleService")
 const moduleService=require("../service/moduleService")
 const privilegeService=require("../service/priviledgeService")
 const {modulePriviledge,access}=require("../lib/databaseConnection")
-
+const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
+const {notFoundException}=require("../exceptions/notFoundException")
 
 
 class accessService {
@@ -19,7 +20,7 @@ class accessService {
             },
         });
         if (ModulePriviledge === null || ModulePriviledge === undefined) {
-            throw new Error("module privilege mapping does not exist");
+            throw new notFoundException("Module with this privilege");
         }
 
 
@@ -31,7 +32,7 @@ class accessService {
             },
         });
         if (grantAccess) {
-            throw new Error("Role already has the access");
+            throw new alreadyExistsException("Role with access")
         }
 
         // create the mapping
@@ -55,9 +56,8 @@ class accessService {
             },
         });
         if (ModulePriviledge === null || ModulePriviledge === undefined) {
-            throw new Error("module privilege mapping does not exist");
+            throw new notFoundException("Module with this privilege");
         }
-
         // check if the `role` already has the access
         const grantAccess = await access.findOne({
             where: {
@@ -66,18 +66,14 @@ class accessService {
             },
         });
         if (grantAccess === null || grantAccess === undefined) {
-            throw new Error("Role does not have the access");
+            throw new notFoundException("Module with this privilege");
         }
-
-
         // remove the mapping
         await access.destroy({where:{
             roleId: role.id,
             modulePriviledgeId: ModulePriviledge.id,
         }});
     }
-
-
 }
 
 module.exports=new accessService()

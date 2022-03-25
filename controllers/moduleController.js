@@ -7,7 +7,6 @@ class ModuleController {
         try {
             await moduleService.create(req.body)
             successResponse(res, 400, req.body, "created Successfully");
-
         } catch (err) {
             next(err);
         }
@@ -36,11 +35,7 @@ class ModuleController {
         const id = req.params.id;
         try {
             const moduleData = await moduleService.findById(id);
-            if (moduleData == null) {
-                res.status(404).json({ status: "404", message: " Not Found" });
-            } else {
-                successResponse(res, 200, moduleData, "fetched");
-            }
+            successResponse(res, 200, moduleData, "fetched");
         } catch (err) {
             next(err);
         }
@@ -50,13 +45,8 @@ class ModuleController {
 
         try {
             const id = req.params.id;
-            let moduleData = await moduleService.findById(id);
-            if (moduleData == null) {
-                res.status(404).json({ status: "404", message: " Not Found" });
-            } else {
                 const moduleData = await moduleService.delete(id);
                 successResponse(res, 200, moduleData, "Payment Deleted");
-            }
         } catch (err) {
             next(err);
         }

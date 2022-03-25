@@ -7,16 +7,8 @@ const {category} = require("../lib/databaseConnection");
 class CategoriesController {
     async create(req, res, next) {
         try {
-            let categoryData = await category.findOne({where:{name:req.body.name}});
-
-            if (categoryData == null) {
                 let data=await CategoryService.create(req.body)
                 successResponse(res, 400, data, "Category Created");
-            } else {
-                res.json({
-                    message: "Category already exists",
-                });
-            }
         } catch (err) {
             next(err);
         }
@@ -42,14 +34,11 @@ class CategoriesController {
     }
 
     async findById(req, res, next) {
-        const id = req.params.id;
+
         try {
+            const id = req.params.id;
             const categoryData = await CategoryService.findById(id);
-            if (categoryData == null) {
-                res.status(404).json({ status: "404", message: "Category Not Found" });
-            } else {
-                successResponse(res, 200, categoryData, "Category fetched");
-            }
+            successResponse(res, 200, categoryData, "Category fetched");
         } catch (err) {
             next(err);
         }
@@ -58,13 +47,9 @@ class CategoriesController {
     async delete(req, res, next) {
         const id = req.params.id;
         try {
-            let categoryData = await CategoryService.findById(id);
-            if (categoryData == null) {
-                res.status(404).json({ status: "404", message: "Category Not Found" });
-            } else {
                 const categoryData = await CategoryService.delete(id);
                 successResponse(res, 200, categoryData, "Category Deleted");
-            }
+
         } catch (err) {
             next(err);
         }

@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const {passwordMismatchException}=require("../exceptions/passwordMismatchException")
 const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
 const {notFoundException}=require("../exceptions/notFoundException")
-const {tokenExpiredException}=require("../exceptions/tokenExpiredException")
+
 const generateToken = require("../utils/tokenGenerator");
 class UserService {
   async create(payload) {
@@ -47,7 +47,6 @@ class UserService {
       payload.password = hash;
     }
 
-
         const returnData =  user.update(payload, {
           where: {id},
         });
@@ -84,9 +83,9 @@ class UserService {
     const { username, password } = payload;
     let _user = await user.findOne({ where: { username: username } });
     if (_user != null) {
-      const compared = await bcrypt.compare(password, _user.password);
+      const compared = await bcrypt.compare(password, _user.password);//compare hashed password
       if (compared) {
-        const token = generateToken(_user);
+        const token = generateToken(_user);//jwt token
         return token;
       } else {
         throw new passwordMismatchException();
@@ -109,9 +108,11 @@ class UserService {
   }
   async changePassword(payload){
     const decoded=payload.decoded
-    const user=this.findById(decoded.sub);
-    const compared = await bcrypt.compare(payload.oldPassword, user.password);
-    if(compared){
+    const user=await this.findById(decoded.sub);
+    const oldPassword=payload.oldPassword
+    const password=user.password
+const compare=await bcrypt.compare(oldPassword,password)//comparing old password with user
+    if(compare){
       const data=await this.update(payload,decoded.sub)
       return data
     }
@@ -120,6 +121,7 @@ class UserService {
     }
   }
 }
+
 
 
 

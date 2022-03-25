@@ -1,5 +1,5 @@
 
-
+let alerted=false
 $('#signupForm').submit((event)=>{
 
 
@@ -8,6 +8,7 @@ $('#signupForm').submit((event)=>{
     let confirmPassword=$("#confirmPassword").val()
     let phone=$("#phone").val()
     let email=$("#email").val()
+    let warning=$('#warning')
     let data={
                "username":username,
                "password":password,
@@ -24,12 +25,13 @@ $('#signupForm').submit((event)=>{
         dataType: "json",
         success: function (data, status, jqXHR) {
 
-            console.log(jqXHR.responseJSON.message);// write success in " "
+            alert(jqXHR.responseJSON.message);// write success in " "
         },
 
         error: function (jqXHR, status) {
             // error handler
-            console.log(jqXHR.responseJSON.message);
+
+alert(jqXHR.responseJSON.message)
 
         }
     });

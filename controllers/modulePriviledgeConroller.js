@@ -7,7 +7,6 @@ class modulePriviledgeConroller{
         try {
             await modulePriviledgeService.addPrivilegeToModule(req.body)
             successResponse(res, 400, req.body, "created Successfully");
-
         } catch (err) {
             next(err);
         }

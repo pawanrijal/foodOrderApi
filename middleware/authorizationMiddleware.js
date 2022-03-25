@@ -71,9 +71,8 @@ const  authorizationMiddleware=async (req,res,next)=> {
         if (Access.length === 0) {
             throw new Error("Authorization Exception")
         }
-        req.decoded=decoded;
-        req.user=user;
-        req.role=role
+        req.body.decoded=decoded;
+
 
         // `user` is authorized pass the control to next middleware
         next();

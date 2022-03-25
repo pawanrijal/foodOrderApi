@@ -1,5 +1,9 @@
-const {priviledge,modules,modulePriviledge}=require("../lib/databaseConnection")
+const {modulePriviledge}=require("../lib/databaseConnection")
+const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
+const {notFoundException}=require("../exceptions/notFoundException")
 
+const ModuleService=require("../service/moduleService")
+const PrivilegeService=require("../service/priviledgeService")
 
 class ModulePriviledgeService
 {
@@ -8,29 +12,14 @@ class ModulePriviledgeService
 
         // check if the modules exists
         const {moduleId,privilegeId} = payload;
-        const module = await modules.findOne({
-            where: {
-                id: moduleId,
-            },
-        });
-        if (module === null || module === undefined) {
-            throw new Error("Module does not exist");
-        }
-//TODO:check if privilrge already exists
-        const privilege = await priviledge.findOne({
-            where: {
-                id: privilegeId,
-            },
-        });
-        if (privilege === null || privilegeId === undefined) {
-            throw new Error("Privilege does not exist");
-        }
+        const module = await ModuleService.findById(moduleId)
+        const privilege = await PrivilegeService.findById(privilegeId)
+
         // check if the mapping is already done
         const mapping = await modulePriviledge.findOne({where: payload});
         if (mapping) {
-            throw new Error("privilege modules mapping already exists");
+            throw new alreadyExistsException("Privilege to this module");
         }
-
         // create the mapping
         await modulePriviledge.create(payload);
     }
@@ -38,25 +27,18 @@ class ModulePriviledgeService
     async removePrivilegeFromModule(payload){
 
         // check if the modules exists
-        const {moduleId} = payload;
-        const module = await modules.findOne({
-            where: {
-                id: moduleId,
-            },
-        });
-        if (module === null || module === undefined) {
-            throw new Error("Role does not exist");
-        }
+        const {moduleId,privilegeId} = payload;
+        const module = await ModuleService.findById(moduleId)
+        //check if privilege exists
+        const privilege = await PrivilegeService.findById(privilegeId)
 
         // check if the mapping is already done
         const mapping = await modulePriviledge.findOne({where: payload});
         if (mapping==null||mapping==undefined) {
-            throw new Error("privilege modules mapping does not exists");
+            throw new notFoundException("Privilege in this module");
         }
-
         // delete the mapping
         await modulePriviledge.destroy({where:payload});
-
 }}
 
 module.exports=new ModulePriviledgeService();

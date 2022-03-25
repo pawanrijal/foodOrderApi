@@ -8,7 +8,6 @@ class RoleController {
         try {
             await roleService.create(req.body)
             successResponse(res, 400, req.body, "created Successfully");
-
         } catch (err) {
             next(err);
         }
@@ -34,34 +33,25 @@ class RoleController {
     }
 
     async findById(req, res, next) {
-        const id = req.params.id;
         try {
+            const id = req.params.id;
             const roleData = await roleService.findById(id);
-            if (roleData == null) {
-                res.status(404).json({ status: "404", message: " Not Found" });
-            } else {
-                successResponse(res, 200, roleData, "fetched");
-            }
+            successResponse(res, 200, roleData, "fetched");
         } catch (err) {
             next(err);
         }
     }
 
     async delete(req, res, next) {
-
         try {
             const id = req.params.id;
-            let roleData = await roleService.findById(id);
-            if (roleData == null) {
-                res.status(404).json({ status: "404", message: " Not Found" });
-            } else {
                 const roleData = await roleService.delete(id);
                 successResponse(res, 200, roleData, "Payment Deleted");
-            }
         } catch (err) {
             next(err);
         }
     }
+
     async assignRoleToUser(req,res,next){
         try{
         await roleService.assignRoleToUser(req.body)
@@ -79,10 +69,10 @@ class RoleController {
             next(err)
         }
     }
+
     async addAccessToRole(req, res, next) {
         try {
             await accessService.addAccessToRole(req.body);
-
             successResponse(res, 200, null, "Access has been granted to the role");
         } catch (err) {
             next(err);
@@ -92,16 +82,11 @@ class RoleController {
     async removeAccessFromRole(req, res, next) {
         try {
             await accessService.removeAccessToRole(req.body);
-
             successResponse(res, 200, null, "Access has been removed from the role",);
         } catch (err) {
             next(err);
         }
     }
-
-
 }
-
-
 
 module.exports = new RoleController();
