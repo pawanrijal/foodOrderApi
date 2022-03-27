@@ -1,5 +1,5 @@
 const UserController = require("../controllers/userController");
-const { userSchema } = require("../validationSchemas/userValidationSchema");
+const { signupSchema,loginSchema } = require("../validationSchemas/userValidationSchema");
 const validator = require("../middleware/validationMiddleware");
 
 const passport = require("passport");
@@ -12,13 +12,13 @@ module.exports = (app) => {
     .post(
       // upload.("profile_pic"),
 
-      validator(userSchema),
+      validator(signupSchema),
       UserController.create
     ),
     app
       .route("/user/:id")
       .put( UserController.update);
-  app.route("/user").get(UserController.findAll);
+  app.route("/user").get(authorize,UserController.findAll);
   app.route("/user/:id").get(UserController.findById);
   app.route("/user/:id").delete(UserController.delete);
   app
@@ -27,6 +27,6 @@ module.exports = (app) => {
       passport.authenticate("jwt", { session: false }),
       UserController.profile
     );
-  app.route("/user/login").post(UserController.login);
+  app.route("/user/login").post(validator(loginSchema),UserController.login);
   app.route("/user/changePassword").post( passport.authenticate("jwt", { session: false }),authorize,UserController.changePassword)
 };

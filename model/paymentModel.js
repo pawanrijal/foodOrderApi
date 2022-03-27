@@ -19,10 +19,7 @@ module.exports=(sequelize,type)=>{
             type:type.INTEGER,
             required:true
         },
-        dues:{
-            type:type.BOOLEAN,
-            required:true
-        }
+
 
     })
 }

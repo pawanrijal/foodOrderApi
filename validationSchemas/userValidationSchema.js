@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const userSchema = Joi.object({
+const signupSchema = Joi.object({
 
   username: Joi.string().required(),
   password: Joi.string().min(8).required(),
@@ -10,4 +10,11 @@ const userSchema = Joi.object({
   phone:Joi.string().required().min(10),
 });
 
-module.exports = { userSchema };
+const loginSchema = Joi.object({
+
+  username: Joi.string().required(),
+  password: Joi.string().min(8).required(),
+
+});
+
+module.exports = { signupSchema,loginSchema };

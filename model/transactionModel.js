@@ -5,14 +5,10 @@ module.exports=(sequelize,type)=>{
             primaryKey: true,
             autoIncrement: true,
         },
+        userId:{
+            type:type.INTEGER
+        },
 
-        transaction_date:{
-            type:type.DATE,
-        },
-        paymentId:{
-            type:type.INTEGER,
-            required:true
-        },
         debit:{
             type:type.FLOAT,
             defaultValue:0

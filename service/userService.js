@@ -91,7 +91,7 @@ class UserService {
         throw new passwordMismatchException();
       }
     } else {
-      throw new notFoundException("User");
+      throw new notFoundException("User")
     }
   }
 

@@ -14,8 +14,8 @@ module.exports=(sequelize,type)=>{
         userId:{
             type:type.INTEGER,required:true,allowNull:false
         },
-        remarks:{
-            type:type.STRING,//if urgent or other things to send
+        totalAmount:{
+            type:type.FLOAT
         }
     },{timestamps:true}
         )

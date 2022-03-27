@@ -1,4 +1,5 @@
 const orderController = require("../controllers/orderController");
+const authorize=require("../middleware/authorizationMiddleware")
 const passport = require("passport");
 module.exports = (app) => {
     app
@@ -6,10 +7,10 @@ module.exports = (app) => {
         .post(passport.authenticate("jwt", { session: false }),
             orderController.create
         ),
-        app.route("/order/update/:id")
-            .put( passport.authenticate("jwt", { session: false }),orderController.update);
+        app.route("/order/:id")
+            .put( passport.authenticate("jwt", { session: false }),authorize,orderController.update);
     app.route("/order").get(orderController.findAll);
     app.route("/order/:id").get(orderController.findById);
-    app.route("/order/delete/:id").delete(orderController.delete);
+    app.route("/order:id").delete(orderController.delete);
 
 };

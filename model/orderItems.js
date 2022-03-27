@@ -11,10 +11,7 @@ module.exports=(sequelize,type)=>{
         productId:{
             type:type.INTEGER
         },
-        totalAmount:{
-            type:type.FLOAT,
-            defaultValue:0
-        },
+
         quantity:{
             type:type.INTEGER,
             defaultValue: 1

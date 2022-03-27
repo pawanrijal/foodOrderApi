@@ -23,8 +23,8 @@ require("./utils/passportConfig")(passport);
 sequelize
   .authenticate()
   .then(() => {
-    // sequelize.sync({ force: true });
-    console.log("Database connected successfully");
+    // sequelize.sync({ alter: true });
+    console.log("Database connected successfully")
   })
   .catch((err) => {
     console.log(err.message);

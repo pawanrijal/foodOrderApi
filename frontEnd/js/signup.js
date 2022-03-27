@@ -1,5 +1,5 @@
 
-let alerted=false
+
 $('#signupForm').submit((event)=>{
 
 
@@ -8,7 +8,7 @@ $('#signupForm').submit((event)=>{
     let confirmPassword=$("#confirmPassword").val()
     let phone=$("#phone").val()
     let email=$("#email").val()
-    let warning=$('#warning')
+
     let data={
                "username":username,
                "password":password,
@@ -26,15 +26,20 @@ $('#signupForm').submit((event)=>{
         success: function (data, status, jqXHR) {
 
             alert(jqXHR.responseJSON.message);// write success in " "
+            window.location.href = '../myPages/login.html';
         },
 
         error: function (jqXHR, status) {
             // error handler
 
-alert(jqXHR.responseJSON.message)
+                alert(jqXHR.responseJSON.message)
 
         }
     });
     event.preventDefault();
 })
 
+
+
+
+//TODO:ValidationSchema
