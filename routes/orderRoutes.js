@@ -8,7 +8,7 @@ module.exports = (app) => {
             orderController.create
         ),
         app.route("/order/:id")
-            .put( passport.authenticate("jwt", { session: false }),authorize,orderController.update);
+            .put( passport.authenticate("jwt", { session: false }),orderController.update);
     app.route("/order").get(orderController.findAll);
     app.route("/order/:id").get(orderController.findById);
     app.route("/order:id").delete(orderController.delete);

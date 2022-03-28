@@ -7,8 +7,8 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <link href="styles/signup.css" rel="stylesheet">
-  <title>Add category</title>
+
+  <title>Add Food</title>
 </head>
 <body>
 
@@ -60,11 +60,15 @@
       <h1 >Add Food</h1>
     </div>
     <div class="card-body mt-0">
-      <form id="categoryForm" method="POST">
+      <form id="foodForm" method="POST">
         <label>Enter Food Name</label>
-        <input class="form-control" type="text" id="name" >
-        <label>Enter Category Description</label>
+        <input class="form-control" type="" id="name" >
+        <label>Enter Food Description</label>
         <input class="form-control" type="text" id="description" >
+        <label>Enter Category </label>
+        <input class="form-control" type="number" id="categoryId" >
+        <label>Enter Price</label>
+        <input class="form-control" type="number" id="price" >
         <input type="submit" value="submit" class="btn btn-success">
       </form>
     </div>
@@ -72,7 +76,7 @@
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="../js/category.js"></script>
+<script src="../js/addFood.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

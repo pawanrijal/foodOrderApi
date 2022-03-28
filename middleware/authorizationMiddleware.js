@@ -20,6 +20,7 @@ const  authorizationMiddleware=async (req,res,next)=> {
         const token = req.headers.authorization.split(" ")[1];
 
         const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+
         if(decoded.exp*1000<Date.now()){
             throw new tokenExpiredException()
         }
@@ -76,8 +77,7 @@ const  authorizationMiddleware=async (req,res,next)=> {
         if (Access.length === 0) {
             throw new AuthorizationException();
         }
-        req.body.decoded=decoded;
-
+req.body.decoded=decoded
 console.log("Authorized")
         // `user` is authorized pass the control to next middleware
         next();

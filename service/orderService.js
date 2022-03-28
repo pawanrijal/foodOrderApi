@@ -3,8 +3,11 @@ const { order } = require("../lib/databaseConnection");
 const { product,sequelize } = require("../lib/databaseConnection");
 const orderRepository=require("../repository/orderRepository")
 const transactionService=require("../service/transactionService")
+const userService=require("../service/userService")
 const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
 const {notFoundException}=require("../exceptions/notFoundException")
+const AuthorizationException=require("../exceptions/authorizationException")
+const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
 class OrderService {
     async create(payload) {
         const transaction = await sequelize.transaction();
@@ -27,6 +30,13 @@ class OrderService {
         //this is not for customers
         const transaction = await sequelize.transaction();
         try {
+            if(payload.decoded.exp*1000<Date.now()){
+                throw new tokenExpiredException()
+            }
+            const user=await userService.findById(payload.decoded.sub)//get user
+            if(user.roleId==2){//check user role if customer
+                throw new AuthorizationException();
+            }
             const orderData = await this.findById(id);
             if (orderData.status != 0) {
                 throw new alreadyExistsException("Order")

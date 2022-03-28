@@ -3,6 +3,8 @@ const successResponse = require("../utils/successResponse");
 const {order} = require("../lib/databaseConnection");
 const jwt = require("jsonwebtoken");
 const UserService = require("../service/userService")
+const AuthorizationException = require("../exceptions/authorizationException");
+const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
 
 
 class OrderController {
@@ -21,6 +23,13 @@ class OrderController {
 
     async update(req, res, next) {
         try {
+            if(req.headers.authorization===null||req.headers.authorization===undefined){
+                throw new AuthorizationException();
+            }
+            const token = req.headers.authorization.split(" ")[1];
+            const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+            req.body.decoded=decoded
+
             const { id } = req.params;
             const orderData = await OrderService.update(req.body, id);
             successResponse(res, 200, orderData, "Order updated");
@@ -39,6 +48,16 @@ class OrderController {
     }
 
     async findById(req, res, next) {
+        //authorization
+        if(req.headers.authorization===null||req.headers.authorization===undefined){
+            throw new AuthorizationException();
+        }
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+        if(decoded.sub===2){
+            throw new AuthorizationException();
+        }
+
         const id = req.params.id;
         try {
             const orderData = await OrderService.findById(id);
