@@ -1,5 +1,5 @@
 const { user } = require("../lib/databaseConnection");
-const { order,role } = require("../lib/databaseConnection");
+const { order,role,sequelize } = require("../lib/databaseConnection");
 const bcrypt = require("bcrypt");
 const {passwordMismatchException}=require("../exceptions/passwordMismatchException")
 const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
@@ -9,6 +9,7 @@ const AuthorizationException = require("../exceptions/authorizationException");
 const generateToken = require("../utils/tokenGenerator");
 const jwt = require("jsonwebtoken");
 const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
+const {QueryTypes} = require("sequelize");
 class UserService {
   async create(payload) {
     //check profile pic of user
@@ -83,6 +84,14 @@ class UserService {
 
   async findById(id) {
     const returnData = await user.findOne({ where: { id } });
+    const credit=await sequelize.query(`SELECT SUM(credit) FROM transactions WHERE user_id=${id}`,{
+      type:QueryTypes.SELECT
+    })
+    const creditSum=credit[0].sum
+   returnData.due_amount=creditSum
+    await user.update({due_amount:creditSum}, {
+      where: {id},
+    });
     if(returnData===null){
       throw new notFoundException("User")
     }
