@@ -6,8 +6,8 @@ const accessService=require("../service/accessService")
 class RoleController {
     async create(req, res, next) {
         try {
-            await roleService.create(req.body)
-            successResponse(res, 400, req.body, "created Successfully");
+            let data=await roleService.create(req.body)
+            successResponse(res, 400, data, "created Successfully");
         } catch (err) {
             next(err);
         }

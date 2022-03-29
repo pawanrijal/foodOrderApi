@@ -1,8 +1,5 @@
 const PaymentService = require("../service/paymentService");
 const successResponse = require("../utils/successResponse");
-const {payment} = require("../lib/databaseConnection");
-const jwt = require("jsonwebtoken");
-const UserService = require("../service/userService")
 
 class PaymentController {
     async create(req, res, next) {

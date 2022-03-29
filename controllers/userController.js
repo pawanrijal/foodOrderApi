@@ -2,7 +2,7 @@ const UserService = require("../service/userService");
 const successResponse = require("../utils/successResponse");
 const jwt = require("jsonwebtoken");
 const AuthorizationException = require("../exceptions/authorizationException");
-const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
+
 require("dotenv").config();
 
 class UserController {

@@ -1,6 +1,6 @@
 const OrderService = require("../service/orderService");
 const successResponse = require("../utils/successResponse");
-const {order} = require("../lib/databaseConnection");
+
 const jwt = require("jsonwebtoken");
 const UserService = require("../service/userService")
 const AuthorizationException = require("../exceptions/authorizationException");

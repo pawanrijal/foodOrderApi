@@ -5,8 +5,8 @@ const successResponse = require("../utils/successResponse");
 class PrivegeConroller {
     async create(req, res, next) {
         try {
-            await privilegeService.create(req.body)
-            successResponse(res, 400, req.body, "Privilege created Successfully");
+           let data= await privilegeService.create(req.body)
+            successResponse(res, 400, data, "Privilege created Successfully");
         } catch (err) {
             next(err);
         }
