@@ -2,6 +2,10 @@ const { category } = require("../lib/databaseConnection");
 const {product}=require("../lib/databaseConnection")
 const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
 const {notFoundException}=require("../exceptions/notFoundException")
+const jwt = require("jsonwebtoken");
+const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
+const UserService=require("../service/userService")
+const AuthorizationException = require("../exceptions/authorizationException");
 class CategoryService {
     async create(payload) {
         let categoryData = await category.findOne({where:{name:payload.name}});
@@ -14,7 +18,16 @@ class CategoryService {
 
     }
 
-    async update(payload, id) {
+    async update(payload, id,token) {
+        const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+
+        if(decoded.exp*1000<Date.now()){//expiration check
+            throw new tokenExpiredException()
+        }
+        let _user=await UserService.findById(decoded.sub)
+        if(_user.roleId!=1){
+            throw new AuthorizationException()
+        }
         await this.findById(id);
         const returnData = await category.update(payload, {
             where: { id },
@@ -36,7 +49,17 @@ class CategoryService {
         }
         return returnData;
     }
-    async delete(id) {
+    async delete(id,token) {
+        const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+
+        if(decoded.exp*1000<Date.now()){//expiration check
+            throw new tokenExpiredException()
+        }
+        let _user=await UserService.findById(decoded.sub)
+        if(_user.roleId!=1){
+            throw new AuthorizationException()
+        }
+
         let categoryData = await this.findById(id);
         if (categoryData === null) {
             throw new notFoundException("Category")

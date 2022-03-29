@@ -10,17 +10,17 @@ module.exports = (app) => {
   app
     .route("/user")
     .post(
-      // upload.("profile_pic"),
+      upload.single("profile_pic"),
 
       validator(signupSchema),
       UserController.create
     ),
     app
       .route("/user/:id")
-      .put( UserController.update);
+      .put(passport.authenticate("jwt", { session: false }), UserController.update);
   app.route("/user").get(authorize,UserController.findAll);
-  app.route("/user/:id").get(UserController.findById);
-  app.route("/user/:id").delete(UserController.delete);
+  app.route("/user/:id").get(passport.authenticate("jwt", { session: false }),UserController.findById);
+  app.route("/user/:id").delete(passport.authenticate("jwt", { session: false }),UserController.delete);
   app
     .route("/user/profile")
     .post(

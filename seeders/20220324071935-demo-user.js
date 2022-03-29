@@ -17,7 +17,7 @@ module.exports = {
       password: "$2b$10$ZFpfY4F/1dy0z1.sqd/.ueNrDqcbk6etJnOhuh8kgkB1GlnUTbakq",
       profile_pic: null,
       email: "pwnrijal@gmail.com",
-
+      role_id:1,
       phone: "9841522314",
       created_at: new Date(),
       updated_at: new Date(),

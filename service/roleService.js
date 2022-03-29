@@ -50,7 +50,7 @@ class RoleService {
         await userService.findById(payload.userId)
 
         //check if role exists
-        await roleService.findById(payload.roleId)
+        await this.findById(payload.roleId)
         // check if mapping already exists
         const assigned = await userRole.findOne({
             where: payload,

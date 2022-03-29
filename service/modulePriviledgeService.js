@@ -16,7 +16,7 @@ class ModulePriviledgeService
         const privilege = await PrivilegeService.findById(privilegeId)
 
         // check if the mapping is already done
-        const mapping = await modulePriviledge.findOne({where: payload});
+        const mapping = await modulePriviledge.findOne({where: {moduleId,privilegeId}});
         if (mapping) {
             throw new alreadyExistsException("Privilege to this module");
         }

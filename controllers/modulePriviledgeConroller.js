@@ -5,8 +5,8 @@ const successResponse = require("../utils/successResponse");
 class modulePriviledgeConroller{
     async addPrivilegeToModule(req,res,next){
         try {
-            await modulePriviledgeService.addPrivilegeToModule(req.body)
-            successResponse(res, 400, req.body, "created Successfully");
+            let data=await modulePriviledgeService.addPrivilegeToModule(req.body)
+            successResponse(res, 400, data, "created Successfully");
         } catch (err) {
             next(err);
         }

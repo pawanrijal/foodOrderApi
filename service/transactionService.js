@@ -1,32 +1,33 @@
 
-const { transaction} = require("../lib/databaseConnection");
+const { transaction,sequelize} = require("../lib/databaseConnection");
 const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
 const {notFoundException}=require("../exceptions/notFoundException")
 const userService = require("./userService");
+const {QueryTypes} = require("sequelize");
 
 class TransactionService {
-    async addCredit(transaction,userId,totalAmount){
+    async addCredit(transactions,userId,totalAmount){
         let user=await userService.findById(userId);
-        const transactionData= await transactionService.create(
+        const transactionData= await transaction.create(
             {
                 userId:user.id,
                 credit:totalAmount
             },
         )
-        user.save({transaction:transaction})
+        user.save({transaction:transactions})
         return transactionData
 
     }
 
-    async addDebit(transaction,userId,totalAmount){
+    async addDebit(transactions,userId,totalAmount){
         let user=await userService.findById(userId);
-        const transactionData= await transactionService.create(
+        const transactionData= await transaction.create(
             {
                 userId:user.id,
                 debit:totalAmount
             },
         )
-        user.save({transaction:transaction})
+        user.save({transaction:transactions})
         return transactionData
     }
     async update(payload, id) {
@@ -54,6 +55,30 @@ class TransactionService {
         await this.findById(id)
         const returnData = await transaction.destroy({ where: { id } });
         return returnData;
+    }
+    async getTransactionOfUser(id){
+        const data=await transaction.findAll({
+            where:{
+                user_id:id
+            }
+        })
+        return data;
+    }
+
+    async calculateDues(id){
+       const debit=await sequelize.query(`SELECT SUM(debit) FROM transactions WHERE user_id=${id}`,{
+           type:QueryTypes.SELECT
+       })
+        const debitSum=debit[0].sum
+
+        const credit=await sequelize.query(`SELECT SUM(credit) FROM transactions WHERE user_id=${id}`,{
+            type:QueryTypes.SELECT
+        })
+        const creditSum=credit[0].sum
+        console.log(creditSum)
+
+        const dues=creditSum-debitSum
+        return {'Dues':dues}
     }
 
 }

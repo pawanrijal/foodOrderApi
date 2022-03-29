@@ -5,8 +5,8 @@ const successResponse = require("../utils/successResponse");
 class ModuleController {
     async create(req, res, next) {
         try {
-            await moduleService.create(req.body)
-            successResponse(res, 400, req.body, "created Successfully");
+            let data=await moduleService.create(req.body)
+            successResponse(res, 400, data, "created Successfully");
         } catch (err) {
             next(err);
         }

@@ -6,6 +6,7 @@ const PaymentRoute=require("./paymentRoutes")
 const RoleRoute=require("./roleRoutes")
 const PriviledgeRoute=require("./priviledgeRoutes")
 const ModuleRoute=require("./moduleRoutes")
+const TransactionRoute=require("./transactionRoutes")
 
 exports.initRoutes = (app) => {
   UserRoute(app);
@@ -16,5 +17,6 @@ exports.initRoutes = (app) => {
   RoleRoute(app)
   PriviledgeRoute(app);
   ModuleRoute(app)
+  TransactionRoute(app)
 
 };

@@ -52,6 +52,13 @@ const  authorizationMiddleware=async (req,res,next)=> {
             },
         });
 
+        if(module===null){
+            throw new notFoundException("Module")
+        }
+        if(privilege===null){
+            throw new notFoundException("Privilege")
+        }
+
         // find mapping between `module` and `privilege`
         const ModulePrivilege = await modulePriviledge.findOne({
             where: {
@@ -59,6 +66,11 @@ const  authorizationMiddleware=async (req,res,next)=> {
                 privilegeId: privilege.id,
             },
         });
+        if(ModulePrivilege===null){
+            throw new notFoundException("Mapping between module and privilege")
+        }
+
+
 
         // create filter object to query the `access` table
         const filter = [roleData].map((role) => {
@@ -75,7 +87,7 @@ const  authorizationMiddleware=async (req,res,next)=> {
 
         // check if the user has `access` to use `method` on `module`
         if (Access.length === 0) {
-            throw new AuthorizationException();
+            throw new notFoundException("Access to this module");
         }
 req.body.decoded=decoded
 console.log("Authorized")

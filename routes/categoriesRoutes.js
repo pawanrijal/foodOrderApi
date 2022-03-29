@@ -11,7 +11,7 @@ module.exports = (app) => {
             CategoryController.create
         )
         app.route("/category/:id")
-            .put(validator(categorySchema), CategoryController.update);
+            .put(validator(categorySchema),passport.authenticate("jwt", { session: false }), CategoryController.update);
     app.route("/category").get(CategoryController.findAll);
     app.route("/category/:id").get(CategoryController.findById);
     app.route("/category/:id").delete(CategoryController.delete);

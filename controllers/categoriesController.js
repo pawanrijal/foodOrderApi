@@ -1,6 +1,6 @@
 const CategoryService = require("../service/categoriesService");
 const successResponse = require("../utils/successResponse");
-const {category} = require("../lib/databaseConnection");
+const AuthorizationException = require("../exceptions/authorizationException");
 
 
 
@@ -17,7 +17,11 @@ class CategoriesController {
     async update(req, res, next) {
         try {
             const { id } = req.params;
-            const categoryData = await CategoryService.update(req.body, id);
+            if(req.headers.authorization===null||req.headers.authorization===undefined){
+                throw new AuthorizationException();
+            }
+            const token = req.headers.authorization.split(" ")[1];
+            const categoryData = await CategoryService.update(req.body, id,token);
             successResponse(res, 200, categoryData, "Category updated");
         } catch (err) {
             next(err);
@@ -47,7 +51,12 @@ class CategoriesController {
     async delete(req, res, next) {
         const id = req.params.id;
         try {
-                const categoryData = await CategoryService.delete(id);
+            if(req.headers.authorization===null||req.headers.authorization===undefined){
+                throw new AuthorizationException();
+            }
+            const token = req.headers.authorization.split(" ")[1];
+
+                const categoryData = await CategoryService.delete(id,token);
                 successResponse(res, 200, categoryData, "Category Deleted");
 
         } catch (err) {

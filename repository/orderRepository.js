@@ -1,11 +1,14 @@
 
 const {product,order,orderItem}=require("../lib/databaseConnection")
 const userService=require("../service/userService")
-const transactionService=require('../service/transactionService')
+const menuService=require("../service/menuService")
+const {notFoundException} = require("../exceptions/notFoundException");
+
 
 class orderRepository {
-    //TODO:addDue
+
     async createOrder(payload,transaction){
+
         let data=await order.create({
             userId:payload.userId
         },
@@ -13,24 +16,20 @@ class orderRepository {
         return data;
     }
     async addToOrder(order,orderData,transaction){
-        try {
-            const data = orderData.map((object) => {
-                return {
-                    orderId: order.id,
-                    ...object,
-                    price:product.price
-                }
-            })
-
-            const returnData=await orderItem.bulkCreate(data,{ transaction: transaction });
-            return returnData
-
-        }catch(err){
-
-            throw err;
+    const data = orderData.map( (object) => {
+        return {
+            orderId: order.id,
+            ...object,
+            price: product.price
         }
+    })
 
-    }
+    const returnData = await orderItem.bulkCreate(data, {transaction: transaction});
+    return returnData
+}
+
+
+
 
     async calculateOrderAmount(orderData) {
 

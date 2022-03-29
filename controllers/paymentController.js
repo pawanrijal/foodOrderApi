@@ -7,13 +7,9 @@ const UserService = require("../service/userService")
 class PaymentController {
     async create(req, res, next) {
         try {
-            const token = req.headers.authorization.split(" ")[1];
-            const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
-            req.body.userId=decoded.sub
-
-            req.body.paid_date=Date.now()
-            await PaymentService.create(req.body)
-            successResponse(res, 400, req.body, "Paid Successfully");
+            req.body.paid_date=new Date()
+           const data= await PaymentService.create(req.body)
+            successResponse(res, 400, data, "Paid Successfully");
 
         } catch (err) {
             next(err);
@@ -66,7 +62,18 @@ class PaymentController {
         } catch (err) {
             next(err);
         }
-    }}
+    }
+
+    async getAllUserPayment(req,res,next){
+        try {
+            let data = await PaymentService.getAllUserPayment(req.body.decoded.sub);
+            successResponse(res, 200, data, "Fetched")
+        }catch(err){
+            next(err)
+        }
+    }
+
+}
 
 
 

@@ -1,6 +1,8 @@
 const UserService = require("../service/userService");
 const successResponse = require("../utils/successResponse");
 const jwt = require("jsonwebtoken");
+const AuthorizationException = require("../exceptions/authorizationException");
+const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
 require("dotenv").config();
 
 class UserController {
@@ -16,7 +18,11 @@ class UserController {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      const userData = await UserService.update(req.body, id);
+      if(req.headers.authorization===null||req.headers.authorization===undefined){
+        throw new AuthorizationException();
+      }
+      const token = req.headers.authorization.split(" ")[1];
+      const userData = await UserService.update(req.body, id,token);
       successResponse(res, 200, userData, "User updated");
     } catch (err) {
       next(err);
@@ -43,9 +49,15 @@ class UserController {
   }
 
   async delete(req, res, next) {
+    if(req.headers.authorization===null||req.headers.authorization===undefined){
+      throw new AuthorizationException();
+    }
+    const token = req.headers.authorization.split(" ")[1];
+
+
     const id = req.params.id;
     try {
-        const userData = await UserService.delete(id);
+        const userData = await UserService.delete(id,token);
         successResponse(res, 200, userData, "User Deleted");
     } catch (err) {
       next(err);

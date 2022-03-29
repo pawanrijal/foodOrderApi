@@ -8,6 +8,8 @@ const {alreadyExistsException}=require("../exceptions/alreadyExistsException")
 const {notFoundException}=require("../exceptions/notFoundException")
 const AuthorizationException=require("../exceptions/authorizationException")
 const {tokenExpiredException} = require("../exceptions/tokenExpiredException");
+const {QueryTypes} = require("sequelize");
+const jwt = require("jsonwebtoken");
 class OrderService {
     async create(payload) {
         const transaction = await sequelize.transaction();
@@ -15,11 +17,23 @@ class OrderService {
         const order =await orderRepository.createOrder(payload,transaction)
         let orderData=await orderRepository.addToOrder(order,payload,transaction);
         let totalAmount=await orderRepository.calculateOrderAmount(orderData);
-        await transaction.commit();
+
 
         order.dataValues.totalAmount=totalAmount
 
-        await this.update({totalAmount:totalAmount},order.id);
+        // await this.update({totalAmount:totalAmount,decoded:payload.decoded},order.id);
+
+
+        await transaction.commit();
+        await this.findById(order.id);
+        await sequelize.query(`UPDATE orders
+            SET total_amount=${totalAmount}
+                WHERE id=${order.id};`,{
+                type:QueryTypes
+            })
+               // let data= await order.update({totalAmount:totalAmount},{where:{
+               //      id:order.id
+               //  }})
         return order;
     }catch(err){
            await  transaction.rollback()
@@ -38,9 +52,7 @@ class OrderService {
                 throw new AuthorizationException();
             }
             const orderData = await this.findById(id);
-            if (orderData.status != 0) {
-                throw new alreadyExistsException("Order")
-            }
+
 
             const returnData = await order.update(payload, {
                 where: {id},
@@ -78,7 +90,12 @@ class OrderService {
         }
         return returnData;
     }
-    async delete(id) {
+    async delete(id,token) {
+        const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET);
+        const userData=await userService.findById(decoded.sub)
+        if(userData.roleId==2){
+            throw new AuthorizationException()
+        }
         await this.findById(id)
         const returnData = await order.destroy({ where: { id } });
         return returnData;

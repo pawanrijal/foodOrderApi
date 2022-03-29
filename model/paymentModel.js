@@ -15,10 +15,6 @@ module.exports=(sequelize,type)=>{
             type:type.INTEGER,
             required:true
         },
-        orderId:{
-            type:type.INTEGER,
-            required:true
-        },
 
 
     })

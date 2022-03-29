@@ -51,6 +51,26 @@ class TransactionController {
         }
     }
 
+    async getTransactionOfUser(req,res,next){
+        try{
+        const data=await transactionService.getTransactionOfUser(req.body.decoded.sub)
+            successResponse(res,200,data,"Transaction Fetched")
+
+        }catch(err){
+            next(err)
+        }
+    }
+
+    async calculateDues(req,res,next){
+        try{
+            const data=await transactionService.calculateDues(req.body.decoded.sub)
+            successResponse(res,200,data,"Fetched")
+        }catch(err){
+            next(err)
+        }
+    }
+
+
 }
 
 
